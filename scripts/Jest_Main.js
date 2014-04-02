@@ -7,8 +7,9 @@ function game(){
 	AttachInput("Egg");
   //IgnorePersonObstructions("Egg", true);
 	SetPersonValue("Egg", "deltay", 0);
-	SetPersonSpeedXY("Egg", 2, 1);
-	SetUpdateScript("Gravity(\"Egg\"); Jump(\"Egg\");");
+	SetPersonValue("Egg", "deltax", 0);
+	SetPersonSpeedXY("Egg", 0, 0);
+	SetUpdateScript(" Jump(\"Egg\"); Gravity(\"Egg\"); Move(\"Egg\");");
 
 	MapEngine("test.rmp", 60);
 }
