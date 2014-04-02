@@ -88,8 +88,11 @@ function Move(player){
 	
 	if(data["deltax"]==0)
 		return;
-		
-		
+	
+	SetPersonFrame(player,Math.floor(data["framei"]/100)%data["frmaxi"]);
+	
+	SetPersonValue(player,"framei",(data["framei"]%(data["frmaxi"]*100))+Math.abs(data["deltax"]));
+	
 	for(var i = 0; i<Math.abs(data["deltax"]); i+=10){
 		if(data["deltax"]<0){
 			if(!IsPersonObstructed(player, GetPersonX(player)-1, GetPersonY(player)))

@@ -8,6 +8,8 @@ function game(){
   //IgnorePersonObstructions("Egg", true);
 	SetPersonValue("Egg", "deltay", 0);
 	SetPersonValue("Egg", "deltax", 0);
+	SetPersonValue("Egg", "framei", 0);
+	SetPersonValue("Egg", "frmaxi", 8);
 	SetPersonSpeedXY("Egg", 0, 0);
 	SetUpdateScript(" Jump(\"Egg\"); Gravity(\"Egg\"); Move(\"Egg\");");
 
