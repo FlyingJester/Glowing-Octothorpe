@@ -1,0 +1,7 @@
+author=Flying Jester
+description=Platformer
+name=Platformer
+screen_height=480
+screen_width=800
+script=Jest_Main.js
+
