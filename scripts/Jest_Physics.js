@@ -52,7 +52,7 @@ function Jump(player){
 	
 }
 
-function Move(player){
+function Control(player){
 	var data = GetPersonData(player);
 
 	var mov = false;
@@ -66,6 +66,10 @@ function Move(player){
 		SetPersonValue(player,"deltax",data["deltax"]+1);
 		mov = true;
 	}
+	Move(player, mov);
+}
+
+function Move(player, mov){
 	
 	data = GetPersonData(player);
 	

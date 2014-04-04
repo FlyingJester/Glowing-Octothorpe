@@ -1,10 +1,15 @@
 RequireScript("Jest_Map.js");
-
+RequireScript("Jest_Enemy.js");
 RequireScript("Jest_Physics.js");
 
 var ScoreFont = LoadFont("numbers.rfn");
 
-var ph = 100;
+var Player = {
+	health:100,
+	maxhealth:100,
+	defense:0,
+
+}
 
 function game(){
 	CreatePerson("Egg", "egg.rss", false);
@@ -17,7 +22,7 @@ function game(){
 	SetPersonSpeedXY("Egg", 0, 0);
 
 		
-	SetUpdateScript("var inp = GetInputPerson(); Jump(inp); Gravity(inp); Move(inp);\
+	SetUpdateScript("var inp = GetInputPerson(); Jump(inp); Gravity(inp); Control(inp);\
 	var inpx = GetPersonX(inp);\
 	var inpy = GetPersonY(inp);\
 	if(inpx<0){\
@@ -32,17 +37,19 @@ function game(){
 	else if(inpy>GetLayerHeight(0)*GetTileHeight()){\
 		FJ.Map.South();\
 	}\
+	\
+	ThinkAboutSpikies();\
 	");
 
 	SetRenderScript(
 		"Rectangle(20, 20, 80, 20, CreateColor(0, 0, 0, 255));\
 		Rectangle(110, 20, 450, 20, CreateColor(0, 0, 0, 255));\
-		ScoreFont.drawText(25, 25, ph);\
+		ScoreFont.drawText(25, 25, Player.health);\
 		ScoreFont.drawText(115, 25, 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG 1234567890 FLYING JESTER');"
 	);
 
-	BindKey(KEY_COMMA, "ph--", "");
-	BindKey(KEY_PERIOD, "ph++", "");
+	BindKey(KEY_COMMA, "Player.health--; Player.health = Math.max(Player.health, 0);", "");
+	BindKey(KEY_PERIOD, "Player.health++; Player.health = Math.min(Player.health, Player.maxhealth);", "");
 
 	MapEngine("test.rmp", 60);
 }
