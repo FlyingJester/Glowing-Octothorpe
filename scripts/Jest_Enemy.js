@@ -4,7 +4,7 @@ function CarryPerson(name){
 
 		var sx = GetPersonX(name);
 		var sy = GetPersonY(name);
-		ptm = GetObstructingPerson(name,sx,sy-1)
+		var ptm = GetObstructingPerson(name,sx,sy-1);
 		
 		if(ptm!=""){
 			var dx = GetPersonValue(name,"deltax");
@@ -17,6 +17,35 @@ function CarryPerson(name){
 			SetPersonFrame(ptm, f);
 			SetPersonValue(ptm, "deltax", ptmdx);
 		}
+
+}
+
+
+function DamageNearbyPerson(name, amount){
+	var sx = GetPersonX(name);
+	var sy = GetPersonY(name);
+	var ptd = GetObstructingPerson(name,sx,sy-4);
+	
+	if(ptd=="")
+		ptd = GetObstructingPerson(name,sx,sy+4);
+	if(ptd=="")
+		ptd = GetObstructingPerson(name,sx-4,sy);
+	if(ptd=="")
+		ptd = GetObstructingPerson(name,sx+4,sy);
+
+	if(ptd=="")
+		return false;
+		
+	if(ptd==GetInputPerson())
+		Player.health-=Math.max(amount-Player.defense, 1);
+		
+	else{
+		var data = GetPersonData(ptd);
+		data["health"]-=Math.max(data["defense"]-amount, 1);
+		SetPersonData(ptd,data);
+	}
+
+	return true;
 
 }
 
@@ -37,6 +66,17 @@ function AddSpiky(name){
 	SetPersonValue(name, "deltax", -25);
 	SetPersonValue(name, "framei", 0);
 	SetPersonValue(name, "frmaxi", 1);
+	SetPersonValue(name, "cooldown", 0);
+	
+	SetPersonScript(name, SCRIPT_ON_DESTROY, "\
+	for(var i in SpikyList){\
+		if(SpikyList[i]==\""+name+"\"){\
+			SpikyList.splice(i, 1);\
+			break;\
+		}\
+	}\
+	");
+
 }
 
 function ThinkAboutSpikies(){
@@ -45,6 +85,7 @@ function ThinkAboutSpikies(){
 		var sx = GetPersonX(SpikyList[i]);
 		var sy = GetPersonY(SpikyList[i]);
 		var dx = GetPersonValue(SpikyList[i],"deltax");
+		var cooldown = GetPersonValue(SpikyList[i],"cooldown");
 		
 		
 		if(dx>0){
@@ -62,7 +103,15 @@ function ThinkAboutSpikies(){
 		}
 				
 		CarryPerson(SpikyList[i]);
-				
+		
+		if(cooldown==0){
+			if(DamageNearbyPerson(SpikyList[i], 10))
+				SetPersonValue(SpikyList[i],"cooldown", 60);
+		}
+		else{
+			SetPersonValue(SpikyList[i],"cooldown", cooldown-1);
+		}
+		
 		Move(SpikyList[i], true);
 	}
 
